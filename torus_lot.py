@@ -1,12 +1,18 @@
+# First, build a duplicate array which contains four origin matricies
+# Second, maintain the sum in the row direction for every row, so we can easily compute the sum of consecutive numbers
+# Three, enumerate the left and right boundary of the rectangle, to compute the maximum, I use the maximum sum of subarray algorithm
+# Complexity : O(M * M * N)
 def max_subarray(a, l):
   current, ans, start  = 0, 0, -1
   for i in range(0, len(a)):
     if i - start == l + 1:
       start += 1
-      current -= a[start]
-      while a[start + 1] < 0 and start + 1 < i:
-        start += 1
-        current -= a[start]
+      temp, current = 0, 0
+      for j in range(i-1, start, -1):
+        temp += a[j]
+        if current < temp:
+          current = temp
+          start = j-1
     if current < 0:
       start = i - 1
       current = a[i]
@@ -35,5 +41,7 @@ def solution(C):
       ans = max(ans, max_subarray(a[1:2*m+1], m))
   return ans
 
+a = [7, -2, 1, -2, 3, 7, -2, 1, -2, 3]
 C = [[1, -1, 2], [-1, -1, -1], [3, -1, 4]]
-print solution(C)
+print max_subarray(a, 6)
+#print solution(C)
